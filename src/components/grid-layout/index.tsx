@@ -1,12 +1,9 @@
 import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 
-const layout = [
-  { i: "daily-unique-users", x: 0, y: 0, w: 3, h: 1 },
-  { i: "daily-visits", x: 3, y: 0, w: 3, h: 1 },
-  { i: "daily-active-users", x: 0, y: 0, w: 6, h: 1 },
-  { i: "top-referral", x: 0, y: 0, w: 3, h: 1 },
-  { i: "country", x: 3, y: 0, w: 3, h: 1 },
-];
+import layout from "../../layoutConfig";
+import GridItem from "../grid-item";
+import UniqueView from "../unique-view";
+import PageView from "../page-view";
 
 const getLayouts = () => {
   const savedLayouts = localStorage.getItem("grid-layout");
@@ -16,7 +13,10 @@ const getLayouts = () => {
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-function GridLayout() {
+interface Props {
+  date: string;
+}
+function GridLayout({ date }: Props) {
   const onLayoutChange = (_: Layout[], layouts: Layouts) => {
     localStorage.setItem("grid-layout", JSON.stringify(layouts));
   };
@@ -26,16 +26,36 @@ function GridLayout() {
       layouts={getLayouts()}
       width={1000}
       breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-      cols={{ lg: 6, md: 3, sm: 3, xs: 2, xxs: 1 }}
+      cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
       rowHeight={250}
+      margin={[32, 32]}
       onLayoutChange={onLayoutChange}
+      isDraggable
       isResizable
     >
-      <figure key="daily-unique-users">일별 유저</figure>
-      <figure key="daily-visits">daily-visits</figure>
-      <figure key="daily-active-users">daily-active-users</figure>
-      <figure key="top-referral">top-referral</figure>
-      <figure key="country">country</figure>
+      <div key="daily-unique-users">
+        <GridItem
+          title={"접속유저"}
+          subTitle="Unique Event Count"
+          children={<UniqueView date={date} />}
+        />
+      </div>
+      <div key="daily-visits">
+        <GridItem
+          title={"접속횟수"}
+          subTitle="Total Event Count"
+          children={<PageView date={date} />}
+        />
+      </div>
+      <div key={"daily-active-users"}>
+        <GridItem title={"DAU"} />
+      </div>
+      <div key={"top-referral"}>
+        <GridItem title={"Top Referral"} />
+      </div>
+      <div key={"country"}>
+        <GridItem title={"Country"} />
+      </div>
     </ResponsiveGridLayout>
   );
 }

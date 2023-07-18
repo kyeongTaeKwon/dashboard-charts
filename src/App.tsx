@@ -1,9 +1,9 @@
-import Layout from "./components/grid-layout";
+import Dashboard from "./containers/dashboard";
 
 function App() {
   return (
     <>
-      <Layout />
+      <Dashboard />
     </>
   );
 }
