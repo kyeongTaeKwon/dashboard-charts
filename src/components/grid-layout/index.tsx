@@ -8,16 +8,22 @@ const layout = [
   { i: "country", x: 3, y: 0, w: 3, h: 1 },
 ];
 
+const getLayouts = () => {
+  const savedLayouts = localStorage.getItem("grid-layout");
+
+  return savedLayouts ? JSON.parse(savedLayouts) : { lg: layout };
+};
+
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 function GridLayout() {
-  const onLayoutChange = (layout: Layout[], layouts: Layouts) => {
-    console.log(layout, layouts);
+  const onLayoutChange = (_: Layout[], layouts: Layouts) => {
+    localStorage.setItem("grid-layout", JSON.stringify(layouts));
   };
 
   return (
     <ResponsiveGridLayout
-      layouts={{ lg: layout }}
+      layouts={getLayouts()}
       width={1000}
       breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
       cols={{ lg: 6, md: 3, sm: 3, xs: 2, xxs: 1 }}
